@@ -1,12 +1,12 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <time.h>
-
+#include "forkin.h"
 
 int childact(){
-  int range = 2+rand()%16; 
-  sleep(range);
+  
+  printf("Child PID: %d\n", getpid());
+
+  int range = 5+rand()%16;
+  sleep(2); //change to range once done
+
   printf("For years I laid dormant\n");
   return range;
   //return status;
@@ -14,19 +14,19 @@ int childact(){
 
 int main(){
   srand(time(NULL));
-  int cpid;
-  int status = 1;
-  printf("hello world\n");
+  int cpid, status, sTime;
+  printf("Initial Message\n");
   cpid = fork();
   if(cpid){
     
     cpid = fork();
     //for the newly forked child
-    if(!cpid){ childact(); }
+    if(!cpid)
+      sTime = childact();
     
     else{
-      wait(&status);
-      printf("status?? : %d\n",status);  
+      status = wait(&status);
+      printf("child's pid : %d\n", status);  
     }
     
   }
