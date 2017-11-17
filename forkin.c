@@ -1,3 +1,8 @@
+/*Team StillAngry: Piotr Milewski and Victor Teoh
+  Systems pd10
+  HW12 -- Please Fork Responsibly
+  2017-11-16*/
+
 #include "forkin.h"
 
 int childAct() {
@@ -9,7 +14,7 @@ int childAct() {
   sleep(sleepTime);
   printf("Child %d is now woke\n", getpid());
     
-  return sleepTime; 
+  return sleepTime; //Utilized for ExitStatus
 }
 
 int main(){
@@ -23,11 +28,12 @@ int main(){
   //Executables for Parent and Children
   if (cpid1) { //if parent
     temp = cpid1;
-    cpid1 = 0;
-    cpid2 = fork();
-    if (ppid == getpid()) {
-      cpid1 = temp; 
+    cpid1 = 0; //so child value isn't passed
+    cpid2 = fork(); //second fork
+    if (ppid == getpid()) { //if parent
+      cpid1 = temp; //bring back parent's child value
       
+      //wait for each child to finish
       waitpid(cpid1, &sts1, 0);
       waitpid(cpid2, &sts2, 0);
 
