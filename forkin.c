@@ -1,37 +1,39 @@
 #include "forkin.h"
 
-int childact(){
-  
+int childAct() {
+  srand(getpid()); //seed RNG to not NULL. Otherwise same number will be generated.
   printf("Child PID: %d\n", getpid());
-
-  int range = 5+rand()%16;
-  sleep(2); //change to range once done
-
-  printf("For years I laid dormant\n");
-  return range;
-  //return status;
+    
+  int sleepTime = 1;
+  //sleepTime = 5 + rand() % 16;
+  sleep(sleepTime);
+  printf("Child is now woke\n");
+    
+  return sleepTime; 
 }
 
 int main(){
-  srand(time(NULL));
-  int cpid, status, sTime;
-  printf("Initial Message\n");
-  cpid = fork();
-  if(cpid){
-    
-    cpid = fork();
-    //for the newly forked child
-    if(!cpid)
-      sTime = childact();
-    
-    else{
-      status = wait(&status);
-      printf("child's pid : %d\n", status);  
-    }
-    
-  }
   
-  else{ childact(); }
-
+  int cpid, status, wokeChild;
+  printf("\nInitial Message\n");
+  
+  cpid = fork(); //initial fork
+  
+  //Executables for Parent and Children
+  if (cpid) { //if parent
+    cpid = fork();
+    if (cpid) {
+      wokeChild = wait(&status);
+      printf("Child %d finished after %d seconds\n", wokeChild, WEXITSTATUS(status));
+      printf("Parent wants children to go back to bed\n");
+    }
+    else {
+      return childAct();
+    }
+  }
+  else { 
+    return childAct();
+  } 
+  
   return 0;
 }
