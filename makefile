@@ -8,4 +8,4 @@ run: all
 	./forkin
 
 clean:
-	rm -rf *.o *~ runo
+	rm -rf *.o *~ forkin
